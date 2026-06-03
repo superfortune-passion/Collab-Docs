@@ -36,7 +36,15 @@
 After `npm run db:seed`:
 
 - Alice owns **Getting Started** and **Team Notes (shared with Bob)**
-- Bob sees **Team Notes** under **Shared With Me**
+- Bob sees **Team Notes** under **Shared With Me** (read-only — no edit, save, share, or import)
+
+## Sharing and import (reviewer notes)
+
+| Behavior | Implementation |
+|----------|----------------|
+| **Shared access** | View-only: Bob can open shared docs but cannot edit body, rename, save, import, share, or delete |
+| **Owner access** | Full edit, share, delete, and file import (new / attach / replace) |
+| **Import formats** | `.txt`, `.md`, `.docx` — dashboard creates a new doc; editor attach/replace requires owner |
 
 ## Local instructions (quick)
 
@@ -76,13 +84,20 @@ Opens the browser and starts the dev server. Read `DEMO_SCRIPT.md` while you scr
 - [ ] `npm run build` succeeds
 - [ ] Fresh clone: install → db:push → db:seed → dev works
 - [ ] User switcher persists across navigation
-- [ ] Bob cannot share Alice’s doc (share buttons only for owner)
+- [ ] **Bob view-only:** open **Team Notes** as Bob → “View only” banner, no toolbar save/import, editor is read-only
+- [ ] Bob cannot share, rename, or delete Alice’s documents (owner-only actions)
 - [ ] Unauthorized document URL shows not-found state
+- [ ] **Import `.docx`:** dashboard import of a `.docx` creates a document with content
 - [ ] Import rejects unsupported file types (e.g. `.pdf`)
-- [ ] README links open correctly
+- [ ] README and doc links open correctly (`DEMO_SCRIPT.md`, `ARCHITECTURE.md`, etc.)
+
+## Deployment (fill Live URL above)
+
+- **Local / demo:** SQLite via `DATABASE_URL="file:./dev.db"` (included in `.env.example`)
+- **Hosted (e.g. Vercel):** use PostgreSQL — SQLite is not suitable for serverless production; run `prisma db push` or migrations and `prisma db seed` on deploy
 
 ## Out of scope (by design)
 
 - Real-time collaborative editing
-- Full authentication / OAuth
-- Granular permissions beyond owner vs shared view-only access
+- Full authentication / OAuth (mock Alice/Bob switcher instead)
+- Shared users as co-editors (shared access is **view-only** for a clearer demo)

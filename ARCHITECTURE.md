@@ -30,7 +30,7 @@ User <──shares── Share ──> Document
 
 - **User**: seeded Alice and Bob; identified in UI via HTTP-only cookie (`collab-docs-user-id`).
 - **Document**: `title`, Tiptap `content` as JSON string, `ownerId`, timestamps.
-- **Share**: unique `(documentId, userId)` — simple “has access” flag.
+- **Share**: unique `(documentId, userId)` — grants **view-only** access (not co-edit).
 
 Access rules (`src/lib/document-access.ts`):
 
@@ -47,10 +47,10 @@ Access rules (`src/lib/document-access.ts`):
 
 ### Editor
 
-1. `documents/[id]/page.tsx` loads document with owner and shares; returns 404-style empty state if no access.
+1. `documents/[id]/page.tsx` loads document with owner and shares; returns empty state if no access.
 2. `DocumentEditor` (client) initializes Tiptap from stored JSON.
-3. Auto-save debounces `saveDocument` server action (800ms); manual “Save now” also available.
-4. Title blur triggers `renameDocument`.
+3. **Owners:** auto-save debounces `saveDocument` (800ms); manual “Save now”; title blur calls `renameDocument`; attach/replace import in toolbar.
+4. **Shared users:** editor is read-only (`editable: false`); no save, rename, or import controls; “View only” banner shown.
 
 ### Import
 
