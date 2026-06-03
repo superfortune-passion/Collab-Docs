@@ -1,0 +1,4 @@
+Plain text import sample
+
+This document was imported from a .txt file.
+Use it to demo the import flow in your walkthrough video.
